@@ -1,27 +1,30 @@
+import pickle
+import numpy as np
 from flask import Flask, render_template, url_for, request, redirect
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+
+loaded_model_knn = pickle.load(open('model/AI.ist', 'rb'))
+loaded_model_Log = pickle.load(open('model2/Iris_pickle_file.pkl', 'rb'))
+loaded_model_Tree = pickle.load(open('model3/AI.ist', 'rb'))
 
 
-def create_db():
-    with app.app_context():
-        db.create_all()
+def m1(age, education, sports):
+    X_new = np.array([[int(age)]])
+    pred = loaded_model_knn.predict(X_new)
+    return "Ответ: " + str(pred[0])
 
 
-class Article(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    intro = db.Column(db.String(300), nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow())
+def m2(age, education, sports):
+    X_new = np.array([[int(age), int(education), int(sports)]])
+    pred = loaded_model_Log.predict(X_new)
+    return "Ответ: " + str(pred[0])
 
-    def __repr__(self):
-        return '<Article %r>' % self.id
+
+def m3(age, education, sports):
+    X_new = np.array([[int(age), int(education), int(sports)]])
+    pred = loaded_model_Tree.predict(X_new)
+    return "Ответ: " + str(pred[0])
 
 
 @app.route('/')
@@ -29,50 +32,28 @@ def index():
     return render_template("index.html")
 
 
-@app.route('/posts')
-def posts():
-    articles = Article.query.order_by(Article.date.desc()).all()
-    return render_template("posts.html", articles=articles)
-
-
-@app.route('/posts/<int:id>')
-def posts_detail(id):
-    article = Article.query.get(id)
-    return render_template("posts_detail.html", article=article)
-
-
-@app.route('/create-article', methods=['POST', 'GET'])
-def create_article():
+@app.route('/into/<int:id>', methods=['POST', 'GET'])
+def into(id):
     if request.method == "POST":
-        title = request.form['title']
-        intro = request.form['intro']
-        text = request.form['text']
-
-        article = Article(title=title,intro=intro,text=text)
-        try:
-            db.session.add(article)
-            db.session.commit()
-            return redirect('/posts')
-        except:
-            return "Произошла ошибка"
+        age = request.form['age']
+        education = request.form['education']
+        sports = request.form['sports']
+        rez = ""
+        if id == 1:
+            rez = m1(age, education, sports)
+        elif id == 2:
+            rez = m2(age, education, sports)
+        elif id == 3:
+            rez = m3(age, education, sports)
+        return redirect(url_for('lab', rez=rez))
     else:
-        return render_template("create-article.html")
-
-'''
-@app.route('/')
-def index():
-    return "Hi"
+        return render_template("into.html")
 
 
-@app.route('/home')
-def home():
-    return "u home"
+@app.route('/lab/<string:rez>')
+def lab(rez):
+    return render_template("lab.html", rez=rez)
 
-
-@app.route('/user/<string:name>/<int:id>')
-def user(name, id):
-    return "user page" + name
-'''
 
 if __name__ == "__main__":
     app.run(debug=True)
