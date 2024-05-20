@@ -1,6 +1,6 @@
 import pickle
 import numpy as np
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, jsonify, request, render_template, url_for, redirect
 
 app = Flask(__name__)
 
@@ -53,6 +53,22 @@ def into(id):
 @app.route('/lab/<string:rez>')
 def lab(rez):
     return render_template("lab.html", rez=rez)
+
+
+@app.route('/api/predict/<int:model_id>', methods=['POST'])
+def api_predict(model_id):
+    data = request.get_json()
+    age = data.get('age')
+    education = data.get('education')
+    sports = data.get('sports')
+    prediction = ""
+    if model_id == 1:
+        prediction = m1(age, education, sports)
+    elif model_id == 2:
+        prediction = m2(age, education, sports)
+    elif model_id == 3:
+        prediction = m3(age, education, sports)
+    return jsonify({'prediction': prediction})
 
 
 if __name__ == "__main__":
