@@ -1,27 +1,23 @@
+
 import pickle
-from sklearn import preprocessing
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import LabelEncoder
-import numpy as np
 import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split
 
-dataset = pd.read_excel('dataset.xlsx')
-x1 = np.array(dataset['age'])
-x2 = np.array(dataset['education'])
-x3 = np.array(dataset['sports'])
-y = np.array(dataset['diploma'])
+data_df = pd.read_excel('dataset.xlsx')
+label_encoder = LabelEncoder()
+data_df["diploma"]=label_encoder.fit_transform(data_df["diploma"])
+X=data_df.drop(["diploma"],axis=1)
+Y=data_df["diploma"]
+X_train1,X_test1,Y_train1,Y_test1=train_test_split(X,Y,test_size=0.3,random_state=3)
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(X_train1, Y_train1)
+y_pred = model.predict(X_test1)
 
-y = LabelEncoder().fit_transform(y)
-
-x1 = preprocessing.normalize([x1])
-x2 = preprocessing.normalize([x2])
-x3 = preprocessing.normalize([x3])
-y = preprocessing.normalize([y])
-
-df = np.array([x1+x2+x3])
-df = df.reshape(-1, 1)
-y = y.reshape(-1, 1)
-model = LinearRegression()
-model.fit(df, y)
-with open('AI.ist','wb') as pkl:
+df = pd.DataFrame({'y_pred': y_pred,
+                   'Y_test1': Y_test1})
+with open('AI.ist', 'wb') as pkl:
     pickle.dump(model, pkl)

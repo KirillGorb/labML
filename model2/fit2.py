@@ -15,10 +15,6 @@ y = np.array(dataset['diploma'])
 le = LabelEncoder()
 y = le.fit_transform(y)
 
-x1 = preprocessing.normalize([x1])[0]
-x2 = preprocessing.normalize([x2])[0]
-x3 = preprocessing.normalize([x3])[0]
-
 df = np.array([x1, x2, x3]).T
 
 X_train1, X_test1, Y_train1, Y_test1 = train_test_split(df, y, test_size=0.2, random_state=3)
