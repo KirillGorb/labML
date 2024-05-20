@@ -1,0 +1,12 @@
+{%extends 'base.html'%}
+
+{%block title%}
+INTO
+{%endblock%}
+
+{%block body%}
+    <h1>Метрики качества модели</h1>
+    <p>R-квадрат: {{ r2 }}</p>
+    <p>RMSE: {{ rmse }}</p>
+    <a href="/">Обратно</a>
+{%endblock%}
