@@ -1,12 +1,12 @@
 import pickle
 import numpy as np
 from flask import Flask, jsonify, request, render_template, url_for, redirect
-from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.metrics import r2_score
 
 app = Flask(__name__)
 
 loaded_model_knn = pickle.load(open('model/AI.ist', 'rb'))
-loaded_model_Log = pickle.load(open('model2/Iris_pickle_file.pkl', 'rb'))
+loaded_model_Log = pickle.load(open('model2/AI.ist', 'rb'))
 loaded_model_Tree = pickle.load(open('model3/AI.ist', 'rb'))
 
 app.a = 0
@@ -85,7 +85,7 @@ def into(id):
         app.s = sports
 
         if id == 1:
-            rez = m(age)
+            rez = m(age + education + sports)
         elif id == 2:
             rez = m2(age, education, sports)
         elif id == 3:

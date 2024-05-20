@@ -5,11 +5,11 @@ from sklearn.preprocessing import LabelEncoder
 import numpy as np
 import pandas as pd
 
-dataset = pd.read_excel('dinrent.xlsx')
+dataset = pd.read_excel('dataset.xlsx')
 x1 = np.array(dataset['age'])
 x2 = np.array(dataset['education'])
 x3 = np.array(dataset['sports'])
-y = np.array(dataset['rez'])
+y = np.array(dataset['diploma'])
 
 y = LabelEncoder().fit_transform(y)
 
