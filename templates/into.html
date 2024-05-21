@@ -1,16 +1,23 @@
-{%extends 'base.html'%}
+{% extends 'base.html' %}
 
-{%block title%}
-INTO
-{%endblock%}
+{% block title %}
+Ввод
+{% endblock %}
 
-{%block body%}
-<del>
-    <form method="post">
-        <input type="int" name="age" id="age" placeholder="Введите возраст"><br>
-        <input type="int" name="education" id="education" placeholder="Введите средний балл образования"><br>
-        <input type="int" name="sports" id="sports" placeholder="Введите сколько занимаетесь спортом в неделю"><br>
-        <input type="submit" value="Отправить">
-    </form>
-</del>
-{%endblock%}
+{% block body %}
+<form method="post" class="container">
+    <div class="mb-3">
+        <label for="age" class="form-label">Введите возраст</label>
+        <input type="number" class="form-control" name="age" id="age" placeholder="Введите возраст">
+    </div>
+    <div class="mb-3">
+        <label for="education" class="form-label">Введите средний балл образования</label>
+        <input type="number" class="form-control" name="education" id="education" placeholder="Введите средний балл образования">
+    </div>
+    <div class="mb-3">
+        <label for="sports" class="form-label">Введите сколько занимаетесь спортом в неделю</label>
+        <input type="number" class="form-control" name="sports" id="sports" placeholder="Введите сколько занимаетесь спортом в неделю">
+    </div>
+    <input type="submit" class="btn btn-primary" value="Отправить">
+</form>
+{% endblock %}

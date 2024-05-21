@@ -1,14 +1,12 @@
-{%extends 'base.html'%}
+{% extends 'base.html' %}
 
-{%block title%}
+{% block title %}
 Main
-{%endblock%}
+{% endblock %}
 
-{%block body%}
-<del>
-    <h1>Привет</h1>
-    <a href="/into/{{1}}">Лаб 1</a>
-    <a href="/into/{{2}}">Лаб 2</a>
-    <a href="/into/{{3}}">Лаб 3</a>
-</del>
-{%endblock%}
+{% block body %}
+<h1>Привет</h1>
+<a class="btn btn-primary" href="/into/{{1}}">Лаб 1</a>
+<a class="btn btn-primary" href="/into/{{2}}">Лаб 2</a>
+<a class="btn btn-primary" href="/into/{{3}}">Лаб 3</a>
+{% endblock %}

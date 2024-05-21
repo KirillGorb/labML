@@ -112,22 +112,6 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-@app.route('/api/predict/<int:model_id>', methods=['POST'])
-def api_predict(model_id):
-    data = request.get_json()
-    age = data.get('age')
-    education = data.get('education')
-    sports = data.get('sports')
-    prediction = ""
-    if model_id == 1:
-        prediction = m(age, education, sports)
-    elif model_id == 2:
-        prediction = m2(age, education, sports)
-    elif model_id == 3:
-        prediction = m3(age, education, sports)
-    return jsonify({'prediction': prediction})
-
-
 @app.route('/api/metrics/<int:model_id>', methods=['POST'])
 def api_metrics(model_id):
     data = request.get_json()
@@ -143,6 +127,23 @@ def api_metrics(model_id):
         accuracy = get_metrics2(age, education, sports, y)
     return jsonify({'accuracy': accuracy})
 
+@app.route('/api', methods=['get'])
+def api_predict():
+    X_new = np.array([[int(request.args.get('age')),
+                       int(request.args.get('education')),
+                       int(request.args.get('sports'))]])
+
+    model_id=int(request.args.get('model_id'))
+
+    if model_id == 1:
+        pred  = loaded_model_knn.predict(X_new)
+        return jsonify(sort=str(pred[0]))
+    elif model_id == 2:
+        pred  = loaded_model_Log.predict(X_new)
+        return jsonify(sort=str(pred[0]))
+    elif model_id == 3:
+        pred  = loaded_model_Tree.predict(X_new)
+        return jsonify(sort=str(pred[0]))
 
 if __name__ == "__main__":
     app.run(debug=True)
